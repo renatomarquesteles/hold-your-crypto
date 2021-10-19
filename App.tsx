@@ -5,7 +5,7 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 import { Kanit_400Regular, Kanit_600SemiBold } from '@expo-google-fonts/kanit';
 
-import { SelectUser } from './src/screens/SelectUser';
+import { AppRoutes } from './src/routes';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Kanit_400Regular, Kanit_600SemiBold });
@@ -21,7 +21,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      <SelectUser />
+      <AppRoutes />
     </>
   );
 }
