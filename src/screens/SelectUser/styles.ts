@@ -41,10 +41,6 @@ export const Content = styled.View`
   align-items: center;
 `;
 
-export const ButtonsContainer = styled.View`
-  justify-content: space-between;
-`;
-
 export const Spacing = styled.View`
   margin: 10px 0;
 `;

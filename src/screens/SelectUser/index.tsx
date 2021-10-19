@@ -1,11 +1,12 @@
 import React from 'react';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import Logo from '../../assets/Logo';
 import { PrimaryButton } from '../../components/PrimaryButton';
+import { RootStackParamList } from '../../routes';
 
 import {
   Background,
-  ButtonsContainer,
   Container,
   Content,
   HighlightText,
@@ -14,7 +15,13 @@ import {
   TextContainer,
 } from './styles';
 
-export const SelectUser = () => {
+type Props = StackScreenProps<RootStackParamList, 'SelectUser'>;
+
+export const SelectUser = ({ navigation }: Props) => {
+  const handleDefaultUserSelect = () => {
+    navigation.navigate('Overview');
+  };
+
   return (
     <Background>
       <Container>
@@ -39,7 +46,9 @@ export const SelectUser = () => {
           </PrimaryButton>
         </Spacing>
         <Spacing>
-          <PrimaryButton>Usuário Padrão</PrimaryButton>
+          <PrimaryButton onPress={() => handleDefaultUserSelect()}>
+            Usuário Padrão
+          </PrimaryButton>
         </Spacing>
       </Container>
     </Background>
