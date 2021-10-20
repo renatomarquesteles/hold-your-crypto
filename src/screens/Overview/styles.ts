@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { theme } from '../../styles/theme';
 
 export const ScreenContent = styled.View`
-  height: 100%;
+  flex: 1;
   background: ${theme.colors.background};
 `;
 
@@ -26,7 +26,7 @@ export const BTCBalance = styled.Text`
 `;
 
 export const ListContainer = styled.View`
-  height: 420px;
+  flex: 1;
 `;
 
 export const ListItem = styled.View`
@@ -67,4 +67,5 @@ export const CryptoName = styled(ListItemText)`
 export const ButtonContainer = styled.View`
   height: 120px;
   padding: 30px 35px;
+  justify-content: center;
 `;

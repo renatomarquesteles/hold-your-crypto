@@ -23,6 +23,7 @@ export const OverviewDrawer = () => (
         fontFamily: theme.fonts.text400,
       },
     }}
+    drawerContent={(props) => <CryptoList {...props} />}
   >
     <Drawer.Screen
       name="Overview"
@@ -38,6 +39,5 @@ export const OverviewDrawer = () => (
         ),
       })}
     />
-    <Drawer.Screen name="CryptoList" component={CryptoList} />
   </Drawer.Navigator>
 );

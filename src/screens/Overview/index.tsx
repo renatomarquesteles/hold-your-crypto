@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 
 import { CryptoLogo } from '../../components/CryptoLogo';
 import { PrimaryButton } from '../../components/PrimaryButton';
@@ -36,6 +36,48 @@ export const Overview = () => {
     {
       symbol: 'ADA',
       name: 'Cardano',
+      amount: 10.48,
+      value: 20.33,
+    },
+    {
+      symbol: 'ADA',
+      name: 'Cardanfdao',
+      amount: 10.48,
+      value: 20.33,
+    },
+    {
+      symbol: 'ADA',
+      name: 'asdgsdg',
+      amount: 10.48,
+      value: 20.33,
+    },
+    {
+      symbol: 'ADA',
+      name: 'dfhah',
+      amount: 10.48,
+      value: 20.33,
+    },
+    {
+      symbol: 'ADA',
+      name: 'adfhhadf',
+      amount: 10.48,
+      value: 20.33,
+    },
+    {
+      symbol: 'ADA',
+      name: 'adhfah',
+      amount: 10.48,
+      value: 20.33,
+    },
+    {
+      symbol: 'ADA',
+      name: 'ahdf',
+      amount: 10.48,
+      value: 20.33,
+    },
+    {
+      symbol: 'ADA',
+      name: 'ahhaf',
       amount: 10.48,
       value: 20.33,
     },

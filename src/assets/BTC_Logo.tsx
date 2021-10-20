@@ -3,7 +3,7 @@ import Svg, { Path, SvgProps } from 'react-native-svg';
 
 export default function BTC_Logo(props: SvgProps) {
   return (
-    <Svg width={40} height={40} fill="none" {...props}>
+    <Svg width={40} height={40} fill="none" viewBox="0 0 40 40" {...props}>
       <Path
         d="M39.4 24.84C36.73 35.553 25.876 42.074 15.16 39.4 4.444 36.726-2.074 25.878.6 15.164 3.274 4.448 14.122-2.075 24.836.6 35.55 3.274 42.074 14.123 39.4 24.84z"
         fill="#F7931A"
