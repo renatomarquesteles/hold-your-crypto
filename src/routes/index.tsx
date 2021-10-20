@@ -3,27 +3,25 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { SelectUser } from '../screens/SelectUser';
-import { Overview } from '../screens/Overview';
+import { OverviewDrawer } from './Overview.routes';
 
 export type RootStackParamList = {
   SelectUser: undefined;
-  Overview: undefined;
+  OverviewDrawer: undefined;
 };
 
-const { Navigator, Screen } = createStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export const AppRoutes = () => {
   return (
     <NavigationContainer>
-      <Navigator
-        screenOptions={{
-          headerShown: false,
-          cardStyle: { backgroundColor: 'transparent' },
-        }}
+      <Stack.Navigator
+        initialRouteName="SelectUser"
+        screenOptions={{ headerShown: false }}
       >
-        <Screen name="SelectUser" component={SelectUser} />
-        <Screen name="Overview" component={Overview} />
-      </Navigator>
+        <Stack.Screen name="SelectUser" component={SelectUser} />
+        <Stack.Screen name="OverviewDrawer" component={OverviewDrawer} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

@@ -1,9 +1,7 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
-import { CryptoLogo } from '../../components/CryptoLogo';
+import { FlatList } from 'react-native';
 
-import { Header } from '../../components/Header';
-import { IconButton } from '../../components/IconButton';
+import { CryptoLogo } from '../../components/CryptoLogo';
 import { PrimaryButton } from '../../components/PrimaryButton';
 
 import {
@@ -11,7 +9,6 @@ import {
   BTCBalance,
   ButtonContainer,
   CryptoName,
-  HeaderContainer,
   ListContainer,
   ListItem,
   ListItemInfo,
@@ -19,7 +16,6 @@ import {
   ListItemSmallText,
   ListItemValues,
   ScreenContent,
-  Title,
   TotalBalance,
 } from './styles';
 
@@ -46,51 +42,39 @@ export const Overview = () => {
   ];
 
   return (
-    <View>
-      <Header>
-        <HeaderContainer>
-          <IconButton name="menu" />
+    <ScreenContent>
+      <BalancesContainer>
+        <TotalBalance>$42,833.09</TotalBalance>
+        <BTCBalance>1.00668 BTC</BTCBalance>
+      </BalancesContainer>
 
-          <Title>Hold Your Crypto</Title>
+      <ListContainer>
+        <FlatList
+          data={balances}
+          renderItem={({ item }) => (
+            <ListItem>
+              <ListItemInfo>
+                <CryptoLogo symbol={item.symbol} />
 
-          <IconButton name="user" />
-        </HeaderContainer>
-      </Header>
+                <CryptoName>{item.name}</CryptoName>
+              </ListItemInfo>
 
-      <ScreenContent>
-        <BalancesContainer>
-          <TotalBalance>$42,833.09</TotalBalance>
-          <BTCBalance>1.00668 BTC</BTCBalance>
-        </BalancesContainer>
+              <ListItemValues>
+                <ListItemText>
+                  {item.amount} {item.symbol}
+                </ListItemText>
 
-        <ListContainer>
-          <FlatList
-            data={balances}
-            renderItem={({ item }) => (
-              <ListItem>
-                <ListItemInfo>
-                  <CryptoLogo symbol={item.symbol} />
+                <ListItemSmallText>${item.value}</ListItemSmallText>
+              </ListItemValues>
+            </ListItem>
+          )}
+          keyExtractor={(item) => item.name}
+        />
+      </ListContainer>
 
-                  <CryptoName>{item.name}</CryptoName>
-                </ListItemInfo>
-
-                <ListItemValues>
-                  <ListItemText>
-                    {item.amount} {item.symbol}
-                  </ListItemText>
-
-                  <ListItemSmallText>${item.value}</ListItemSmallText>
-                </ListItemValues>
-              </ListItem>
-            )}
-            keyExtractor={(item) => item.name}
-          />
-        </ListContainer>
-
-        <ButtonContainer>
-          <PrimaryButton>Selecionar Criptomoeda</PrimaryButton>
-        </ButtonContainer>
-      </ScreenContent>
-    </View>
+      <ButtonContainer>
+        <PrimaryButton>Selecionar Criptomoeda</PrimaryButton>
+      </ButtonContainer>
+    </ScreenContent>
   );
 };

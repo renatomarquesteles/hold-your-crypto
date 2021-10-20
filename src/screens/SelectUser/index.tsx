@@ -19,7 +19,7 @@ type Props = StackScreenProps<RootStackParamList, 'SelectUser'>;
 
 export const SelectUser = ({ navigation }: Props) => {
   const handleDefaultUserSelect = () => {
-    navigation.navigate('Overview');
+    navigation.navigate('OverviewDrawer');
   };
 
   return (

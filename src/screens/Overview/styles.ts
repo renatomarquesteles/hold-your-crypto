@@ -2,18 +2,6 @@ import styled from 'styled-components/native';
 
 import { theme } from '../../styles/theme';
 
-export const HeaderContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 16px;
-`;
-
-export const Title = styled.Text`
-  font-size: 18px;
-  color: ${theme.colors.primary};
-  font-family: ${theme.fonts.text400};
-`;
-
 export const ScreenContent = styled.View`
   height: 100%;
   background: ${theme.colors.background};
