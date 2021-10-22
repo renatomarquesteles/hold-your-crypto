@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
@@ -21,17 +21,32 @@ export const CryptoList = (props: DrawerContentComponentProps) => {
         <DrawerItem
           icon={<CryptoLogo symbol="BTC" size={30} />}
           title="Bitcoin (BTC)"
-          onPress={() => {}}
+          onPress={() => {
+            props.navigation.navigate('CryptoDrawer', {
+              screen: 'Crypto',
+              params: { title: 'Bitcoin', currency: 'BTC' },
+            });
+          }}
         />
         <DrawerItem
           icon={<CryptoLogo symbol="ETH" size={30} />}
           title="Ethereum (ETH)"
-          onPress={() => {}}
+          onPress={() => {
+            props.navigation.navigate('CryptoDrawer', {
+              screen: 'Crypto',
+              params: { title: 'Ethereum', currency: 'ETH' },
+            });
+          }}
         />
         <DrawerItem
           icon={<CryptoLogo symbol="ADA" size={30} />}
           title="Cardano (ADA)"
-          onPress={() => {}}
+          onPress={() => {
+            props.navigation.navigate('CryptoDrawer', {
+              screen: 'Crypto',
+              params: { title: 'Cardano', currency: 'ADA' },
+            });
+          }}
         />
       </DrawerContentScrollView>
 

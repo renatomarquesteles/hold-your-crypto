@@ -3,14 +3,10 @@ import React from 'react';
 import { IconButton } from '../IconButton';
 import { Container } from './styles';
 
-type Props = {
-  onPress(): void;
-};
-
-export const ProfileButton = ({ onPress }: Props) => {
+export const ProfileButton = () => {
   return (
     <Container>
-      <IconButton name="user" onPress={onPress} />
+      <IconButton name="user" />
     </Container>
   );
 };

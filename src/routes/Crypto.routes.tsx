@@ -2,34 +2,31 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { ProfileButton } from '../components/ProfileButton';
-import { Overview } from '../screens/Overview';
 import { CryptoList } from '../screens/CryptoList';
+import { Crypto } from '../screens/Crypto';
 import { theme } from '../styles/theme';
 
 export type RootDrawerParamList = {
+  Crypto: { title: string; currency: 'BTC' | 'ETH' | 'ADA' };
   CryptoList: undefined;
-  Overview: undefined;
 };
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
-export const OverviewDrawer = () => (
+export const CryptoDrawer = () => (
   <Drawer.Navigator
-    initialRouteName="Overview"
+    initialRouteName="Crypto"
     screenOptions={{
       headerTintColor: theme.colors.primary,
-      headerTitleAlign: 'center',
-      headerTitleStyle: {
-        fontFamily: theme.fonts.text400,
-      },
+      headerTitleStyle: { fontFamily: theme.fonts.text400 },
     }}
     drawerContent={(props) => <CryptoList {...props} />}
   >
     <Drawer.Screen
-      name="Overview"
-      component={Overview}
-      options={() => ({
-        title: 'Hold Your Crypto',
+      name="Crypto"
+      component={Crypto}
+      options={({ route }) => ({
+        title: route.params?.title || '',
         headerRight: () => <ProfileButton />,
       })}
     />

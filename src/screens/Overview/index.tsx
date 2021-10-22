@@ -1,8 +1,10 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList } from 'react-native';
+import { DrawerScreenProps } from '@react-navigation/drawer';
 
 import { CryptoLogo } from '../../components/CryptoLogo';
 import { PrimaryButton } from '../../components/PrimaryButton';
+import { RootDrawerParamList } from '../../routes/Overview.routes';
 
 import {
   BalancesContainer,
@@ -19,7 +21,9 @@ import {
   TotalBalance,
 } from './styles';
 
-export const Overview = () => {
+type Props = DrawerScreenProps<RootDrawerParamList, 'Overview'>;
+
+export const Overview = ({ navigation }: Props) => {
   const balances = [
     {
       symbol: 'BTC',
@@ -115,7 +119,9 @@ export const Overview = () => {
       </ListContainer>
 
       <ButtonContainer>
-        <PrimaryButton>Selecionar Criptomoeda</PrimaryButton>
+        <PrimaryButton onPress={() => navigation.openDrawer()}>
+          Selecionar Criptomoeda
+        </PrimaryButton>
       </ButtonContainer>
     </ScreenContent>
   );
