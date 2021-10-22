@@ -22,6 +22,7 @@ import {
   TransactionContainer,
   TransactionDate,
 } from './styles';
+import { CircularButton } from '../../components/CircularButton';
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Crypto'>;
 
@@ -83,6 +84,8 @@ export const Crypto = ({ route }: Props) => {
           keyExtractor={(item) => item.id}
         />
       </ListContainer>
+
+      <CircularButton name="plus" />
     </>
   );
 };
