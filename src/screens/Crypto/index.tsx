@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
+import Modal from 'react-native-modal';
 
 import { CryptoLogo } from '../../components/CryptoLogo';
+import { CircularButton } from '../../components/CircularButton';
 import currenciesData from '../../mocks/currenciesData';
 import transactions from '../../mocks/transactions';
+import { NewTransaction } from '../Modals/NewTransaction';
 import { RootDrawerParamList } from '../../routes/Crypto.routes';
 import { formatCurrencyToBRL } from '../../utils/formatCurrencyToBRL';
 
@@ -22,11 +25,12 @@ import {
   TransactionContainer,
   TransactionDate,
 } from './styles';
-import { CircularButton } from '../../components/CircularButton';
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Crypto'>;
 
 export const Crypto = ({ route }: Props) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { currency } = route.params;
   const data = currenciesData.data[currency];
 
@@ -85,7 +89,17 @@ export const Crypto = ({ route }: Props) => {
         />
       </ListContainer>
 
-      <CircularButton name="plus" />
+      <CircularButton name="plus" onPress={() => setIsModalOpen(true)} />
+
+      <Modal
+        isVisible={isModalOpen}
+        onBackButtonPress={() => setIsModalOpen(false)}
+        onBackdropPress={() => setIsModalOpen(false)}
+        animationIn="zoomIn"
+        animationOut="zoomOut"
+      >
+        <NewTransaction setIsModalOpen={setIsModalOpen} />
+      </Modal>
     </>
   );
 };
