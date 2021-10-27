@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';
-import { DrawerScreenProps } from '@react-navigation/drawer';
 import Modal from 'react-native-modal';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { CryptoLogo } from '../../components/CryptoLogo';
 import { CircularButton } from '../../components/CircularButton';
+import { Transaction } from '../../constants/interfaces';
 import currenciesData from '../../mocks/currenciesData';
-import transactions from '../../mocks/transactions';
 import { NewTransaction } from '../Modals/NewTransaction';
 import { RootDrawerParamList } from '../../routes/Crypto.routes';
 import { formatCurrencyToBRL } from '../../utils/formatCurrencyToBRL';
@@ -30,9 +31,21 @@ type Props = DrawerScreenProps<RootDrawerParamList, 'Crypto'>;
 
 export const Crypto = ({ route }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const { currency } = route.params;
   const data = currenciesData.data[currency];
+
+  useEffect(() => {
+    const loadStorage = async () => {
+      const response = await AsyncStorage.getItem(`transactions-${currency}`);
+      const storage = response ? JSON.parse(response) : [];
+
+      setTransactions(storage);
+    };
+
+    loadStorage();
+  }, []);
 
   return (
     <>
@@ -98,7 +111,11 @@ export const Crypto = ({ route }: Props) => {
         animationIn="zoomIn"
         animationOut="zoomOut"
       >
-        <NewTransaction setIsModalOpen={setIsModalOpen} />
+        <NewTransaction
+          currency={currency}
+          setIsModalOpen={setIsModalOpen}
+          setTransactions={setTransactions}
+        />
       </Modal>
     </>
   );
