@@ -1,5 +1,9 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Platform, Pressable, View } from 'react-native';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
+import { format } from 'date-fns';
 import uuid from 'react-native-uuid';
 
 import { ModalOutlinedButton } from '../../../components/ModalButtons/Outlined';
@@ -28,13 +32,10 @@ export const NewTransaction = ({
   setIsModalOpen,
   setTransactions,
 }: Props) => {
-  const [date, setDate] = useState('');
-  const [quoteCurrency, setQuoteCurrency] = useState('BRL');
+  const [date, setDate] = useState(new Date());
   const [quoteValue, setQuoteValue] = useState('');
-  const [transactionCurrency, setTransactionCurrency] = useState(currency);
   const [transactionValue, setTransactionValue] = useState('');
-  const [feeCurrency, setFeeCurrency] = useState('BRL');
-  const [feeValue, setFeeValue] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const saveTransaction = async () => {
     const newTransaction = {
@@ -66,29 +67,50 @@ export const NewTransaction = ({
       <Title>Cadastrar Novo Investimento</Title>
 
       <InputGroup>
-        <TextInput
-          label="Data*"
-          value={date}
-          setValue={setDate}
-          placeholder="____ /____ /____"
-        />
+        <Pressable
+          onPress={() => {
+            console.log('clickou');
+            setShowDatePicker(true);
+          }}
+        >
+          <View pointerEvents="none">
+            <TextInput
+              label="Data*"
+              value={format(date, 'dd/MM/yyyy')}
+              placeholder="____ /____ /____"
+            />
+          </View>
+        </Pressable>
+
+        {showDatePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="date"
+            display="default"
+            minimumDate={new Date(1950, 0, 1)}
+            onChange={(_: Event, selectedDate: Date | undefined) => {
+              console.log('a');
+              setShowDatePicker(Platform.OS === 'ios');
+              setDate(selectedDate || date);
+            }}
+          />
+        )}
       </InputGroup>
 
       <InputGroup>
         <Text>Cotação da moeda</Text>
         <ValuesContainer>
-          <TextInput
-            label="Moeda*"
-            value={quoteCurrency}
-            setValue={setQuoteCurrency}
-            keyboardType="decimal-pad"
-          />
+          <View pointerEvents="none">
+            <TextInput label="Moeda*" value="BRL" setValue={() => {}} />
+          </View>
           <Separator />
           <TextInput
             label="Valor*"
             value={quoteValue}
             setValue={setQuoteValue}
             placeholder="0,00"
+            keyboardType="decimal-pad"
           />
         </ValuesContainer>
       </InputGroup>
@@ -96,37 +118,16 @@ export const NewTransaction = ({
       <InputGroup>
         <Text>Valor da Transação</Text>
         <ValuesContainer>
-          <TextInput
-            label="Moeda*"
-            value={transactionCurrency}
-            setValue={setTransactionCurrency}
-            keyboardType="decimal-pad"
-          />
+          <View pointerEvents="none">
+            <TextInput label="Moeda*" value="BRL" setValue={() => {}} />
+          </View>
           <Separator />
           <TextInput
             label="Valor*"
             value={transactionValue}
             setValue={setTransactionValue}
             placeholder="0,00"
-          />
-        </ValuesContainer>
-      </InputGroup>
-
-      <InputGroup>
-        <Text>Taxa da Transação</Text>
-        <ValuesContainer>
-          <TextInput
-            label="Moeda"
-            value={feeCurrency}
-            setValue={setFeeCurrency}
             keyboardType="decimal-pad"
-          />
-          <Separator />
-          <TextInput
-            label="Valor"
-            value={feeValue}
-            setValue={setFeeValue}
-            placeholder="0,00"
           />
         </ValuesContainer>
       </InputGroup>

@@ -6,7 +6,7 @@ import { Container, Input, Label } from './styles';
 interface Props {
   label: string;
   value: string;
-  setValue: Dispatch<SetStateAction<string>>;
+  setValue?: Dispatch<SetStateAction<string>>;
   placeholder?: string;
   keyboardType?: KeyboardTypeOptions;
 }
@@ -14,7 +14,7 @@ interface Props {
 export const TextInput = ({
   label,
   value,
-  setValue,
+  setValue = () => {},
   placeholder = '',
   keyboardType = 'default',
 }: Props) => {
