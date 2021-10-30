@@ -19,12 +19,6 @@ export const TotalBalance = styled.Text`
   color: ${theme.colors.primary};
 `;
 
-export const BTCBalance = styled.Text`
-  font-family: ${theme.fonts.text400};
-  font-size: 16px;
-  color: ${theme.colors.primaryLight};
-`;
-
 export const ListContainer = styled.View`
   flex: 1;
 `;

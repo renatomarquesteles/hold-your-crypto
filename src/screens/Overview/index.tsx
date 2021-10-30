@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList } from 'react-native';
 import { DrawerScreenProps } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/core';
 
 import { CryptoLogo } from '../../components/CryptoLogo';
 import { PrimaryButton } from '../../components/PrimaryButton';
+import { Transaction } from '../../constants/interfaces';
 import { RootDrawerParamList } from '../../routes/Overview.routes';
+import { getCurrencyQuote } from '../../services/crypto';
+import { formatCurrencyToBRL } from '../../utils/formatCurrencyToBRL';
 
 import {
   BalancesContainer,
-  BTCBalance,
   ButtonContainer,
   CryptoName,
   ListContainer,
@@ -23,75 +27,95 @@ import {
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Overview'>;
 
+interface Balance {
+  symbol: string;
+  name: string;
+  amount: number;
+  value: number;
+}
+
 export const Overview = ({ navigation }: Props) => {
-  const balances = [
-    {
-      symbol: 'BTC',
-      name: 'Bitcoin',
-      amount: 1.00668415,
-      value: 37783.62,
-    },
-    {
-      symbol: 'ETH',
-      name: 'Ethereum',
-      amount: 2.15947,
-      value: 5028.36,
-    },
-    {
-      symbol: 'ADA',
-      name: 'Cardano',
-      amount: 10.48,
-      value: 20.33,
-    },
-    {
-      symbol: 'ADA',
-      name: 'Cardanfdao',
-      amount: 10.48,
-      value: 20.33,
-    },
-    {
-      symbol: 'ADA',
-      name: 'asdgsdg',
-      amount: 10.48,
-      value: 20.33,
-    },
-    {
-      symbol: 'ADA',
-      name: 'dfhah',
-      amount: 10.48,
-      value: 20.33,
-    },
-    {
-      symbol: 'ADA',
-      name: 'adfhhadf',
-      amount: 10.48,
-      value: 20.33,
-    },
-    {
-      symbol: 'ADA',
-      name: 'adhfah',
-      amount: 10.48,
-      value: 20.33,
-    },
-    {
-      symbol: 'ADA',
-      name: 'ahdf',
-      amount: 10.48,
-      value: 20.33,
-    },
-    {
-      symbol: 'ADA',
-      name: 'ahhaf',
-      amount: 10.48,
-      value: 20.33,
-    },
-  ];
+  const [balances, setBalances] = useState<Balance[]>([]);
+  const totalValue = useMemo(
+    () => balances.reduce((total, current) => total + current.value, 0),
+    [balances]
+  );
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    console.log('a');
+    const loadStorage = async () => {
+      const BTCresponse = await AsyncStorage.getItem('transactions-BTC');
+      const ETHresponse = await AsyncStorage.getItem('transactions-ETH');
+      const ADAresponse = await AsyncStorage.getItem('transactions-ADA');
+
+      const BTCstorage: Transaction[] = BTCresponse
+        ? JSON.parse(BTCresponse)
+        : [];
+      const ETHstorage: Transaction[] = ETHresponse
+        ? JSON.parse(ETHresponse)
+        : [];
+      const ADAstorage: Transaction[] = ADAresponse
+        ? JSON.parse(ADAresponse)
+        : [];
+
+      const newBalances = [];
+
+      if (BTCstorage.length) {
+        const currencyAmount = BTCstorage.reduce(
+          (total, current) => total + current.amount,
+          0
+        );
+        const { ticker } = await getCurrencyQuote('BTC');
+
+        newBalances.push({
+          symbol: 'BTC',
+          name: 'Bitcoin',
+          amount: currencyAmount,
+          value: currencyAmount * +ticker.last,
+        });
+      }
+
+      if (ETHstorage.length) {
+        const currencyAmount = ETHstorage.reduce(
+          (total, current) => total + current.amount,
+          0
+        );
+        const { ticker } = await getCurrencyQuote('ETH');
+
+        newBalances.push({
+          symbol: 'ETH',
+          name: 'Ethereum',
+          amount: currencyAmount,
+          value: currencyAmount * +ticker.last,
+        });
+      }
+
+      if (ADAstorage.length) {
+        const currencyAmount = ADAstorage.reduce(
+          (total, current) => total + current.amount,
+          0
+        );
+        const { ticker } = await getCurrencyQuote('ADA');
+
+        newBalances.push({
+          symbol: 'ADA',
+          name: 'Cardano',
+          amount: currencyAmount,
+          value: currencyAmount * +ticker.last,
+        });
+      }
+
+      setBalances(newBalances);
+    };
+
+    loadStorage();
+  }, [isFocused]);
 
   return (
     <ScreenContent>
       <BalancesContainer>
-        <TotalBalance>$42,833.09</TotalBalance>
-        <BTCBalance>1.00668 BTC</BTCBalance>
+        <TotalBalance>{formatCurrencyToBRL(totalValue)}</TotalBalance>
       </BalancesContainer>
 
       <ListContainer>
@@ -107,10 +131,12 @@ export const Overview = ({ navigation }: Props) => {
 
               <ListItemValues>
                 <ListItemText>
-                  {item.amount} {item.symbol}
+                  {item.amount.toFixed(6)} {item.symbol}
                 </ListItemText>
 
-                <ListItemSmallText>${item.value}</ListItemSmallText>
+                <ListItemSmallText>
+                  {formatCurrencyToBRL(item.value)}
+                </ListItemSmallText>
               </ListItemValues>
             </ListItem>
           )}
