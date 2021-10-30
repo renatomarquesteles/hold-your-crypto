@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { format } from 'date-fns';
 
 import { CryptoLogo } from '../../components/CryptoLogo';
 import { CircularButton } from '../../components/CircularButton';
 import { Transaction } from '../../constants/interfaces';
-import currenciesData from '../../mocks/currenciesData';
 import { NewTransaction } from '../Modals/NewTransaction';
 import { RootDrawerParamList } from '../../routes/Crypto.routes';
 import { formatCurrencyToBRL } from '../../utils/formatCurrencyToBRL';
+import { getCurrencyQuote } from '../../services/crypto';
 
 import {
   BalancesContainer,
@@ -26,16 +27,40 @@ import {
   TransactionContainer,
   TransactionDate,
 } from './styles';
-import { format } from 'date-fns';
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Crypto'>;
 
 export const Crypto = ({ route }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [currencyQuote, setCurrencyQuote] = useState(0);
+  const currencyAmount = useMemo(
+    () => transactions.reduce((total, current) => total + current.amount, 0),
+    [transactions]
+  );
+  const currencyTotal = useMemo(
+    () =>
+      transactions.reduce(
+        (total, current) => total + current.amount * currencyQuote,
+        0
+      ),
+    [transactions, currencyQuote]
+  );
 
   const { currency } = route.params;
-  const data = currenciesData.data[currency];
+
+  useEffect(() => {
+    const loadCurrencyQuote = async () => {
+      const response = await getCurrencyQuote(currency);
+
+      if (response) {
+        const { ticker } = response;
+        setCurrencyQuote(+ticker.last);
+      }
+    };
+
+    loadCurrencyQuote();
+  }, [currency]);
 
   useEffect(() => {
     const loadStorage = async () => {
@@ -46,19 +71,19 @@ export const Crypto = ({ route }: Props) => {
     };
 
     loadStorage();
-  }, []);
+  }, [currency]);
 
   return (
     <>
       <CoinInfo>
         <CryptoLogo symbol={currency} size={48} />
         <Quote>Cotação do dia</Quote>
-        <QuoteValue>{formatCurrencyToBRL(data.quote.BRL.price)}</QuoteValue>
+        <QuoteValue>{formatCurrencyToBRL(currencyQuote)}</QuoteValue>
       </CoinInfo>
 
       <BalancesContainer>
-        <Total>{formatCurrencyToBRL(37783.62)}</Total>
-        <BTCTotal>1.000668 BTC</BTCTotal>
+        <Total>{formatCurrencyToBRL(currencyTotal)}</Total>
+        <BTCTotal>{`${currencyAmount.toFixed(6)} ${currency}`}</BTCTotal>
       </BalancesContainer>
 
       <ListContainer>
@@ -83,19 +108,17 @@ export const Crypto = ({ route }: Props) => {
                   </Text>
                   <Text>
                     Valor atual:{' '}
-                    {formatCurrencyToBRL(item.amount * data.quote.BRL.price)}
+                    {formatCurrencyToBRL(item.amount * currencyQuote)}
                   </Text>
                 </View>
 
                 <Profit
                   value={
-                    item.amount * data.quote.BRL.price -
-                    item.amount * item.quote_value
+                    item.amount * currencyQuote - item.amount * item.quote_value
                   }
                 >
                   {formatCurrencyToBRL(
-                    item.amount * data.quote.BRL.price -
-                      item.amount * item.quote_value
+                    item.amount * currencyQuote - item.amount * item.quote_value
                   )}
                 </Profit>
               </TransactionContainer>
