@@ -26,6 +26,7 @@ import {
   TransactionContainer,
   TransactionDate,
 } from './styles';
+import { format } from 'date-fns';
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Crypto'>;
 
@@ -65,7 +66,9 @@ export const Crypto = ({ route }: Props) => {
           data={transactions}
           renderItem={({ item }) => (
             <>
-              <TransactionDate>{item.date}</TransactionDate>
+              <TransactionDate>
+                {format(new Date(item.date), 'dd/MM/yyyy')}
+              </TransactionDate>
               <TransactionContainer>
                 <View>
                   <Description>
