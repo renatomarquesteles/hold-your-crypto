@@ -43,7 +43,6 @@ export const Overview = ({ navigation }: Props) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    console.log('a');
     const loadStorage = async () => {
       const BTCresponse = await AsyncStorage.getItem('transactions-BTC');
       const ETHresponse = await AsyncStorage.getItem('transactions-ETH');

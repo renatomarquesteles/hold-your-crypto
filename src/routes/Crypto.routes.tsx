@@ -1,10 +1,10 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import { ProfileButton } from '../components/ProfileButton';
 import { CryptoList } from '../screens/CryptoList';
 import { Crypto } from '../screens/Crypto';
 import { theme } from '../styles/theme';
+import { HomeButton } from '../components/HomeButton';
 
 export type RootDrawerParamList = {
   Crypto: { title: string; currency: 'BTC' | 'ETH' | 'ADA' };
@@ -25,9 +25,9 @@ export const CryptoDrawer = () => (
     <Drawer.Screen
       name="Crypto"
       component={Crypto}
-      options={({ route }) => ({
+      options={({ route, navigation }) => ({
         title: route.params?.title || '',
-        headerRight: () => <ProfileButton />,
+        headerRight: () => <HomeButton navigation={navigation} />,
       })}
     />
   </Drawer.Navigator>
