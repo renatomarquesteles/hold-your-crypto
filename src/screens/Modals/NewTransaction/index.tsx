@@ -14,7 +14,9 @@ import { Transaction } from '../../../constants/interfaces';
 import {
   ButtonContainer,
   Container,
+  CurrencyInput,
   InputGroup,
+  Label,
   Separator,
   Text,
   Title,
@@ -33,19 +35,19 @@ export const NewTransaction = ({
   setTransactions,
 }: Props) => {
   const [date, setDate] = useState(new Date());
-  const [quoteValue, setQuoteValue] = useState('');
-  const [transactionValue, setTransactionValue] = useState('');
+  const [quoteValue, setQuoteValue] = useState(0);
+  const [transactionValue, setTransactionValue] = useState(0);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const saveTransaction = async () => {
     const newTransaction = {
-      id: uuid.v4(),
-      date: date,
-      amount: +transactionValue / +quoteValue,
-      currency: currency,
-      quote_value: +quoteValue,
-      transaction_currency: transactionCurrency,
-      transaction_value: +transactionValue,
+      id: uuid.v4(), // "314cd1bbd-(...)"
+      date: date, // "2021-10-30T03:29:59.515Z"
+      amount: transactionValue / quoteValue, // 10
+      currency: currency, // "BTC"
+      quote_value: quoteValue, // 12
+      transaction_currency: 'BRL', // "BRL"
+      transaction_value: transactionValue, // 120
     };
 
     const response = await AsyncStorage.getItem(`transactions-${currency}`);
@@ -67,12 +69,7 @@ export const NewTransaction = ({
       <Title>Cadastrar Novo Investimento</Title>
 
       <InputGroup>
-        <Pressable
-          onPress={() => {
-            console.log('clickou');
-            setShowDatePicker(true);
-          }}
-        >
+        <Pressable onPress={() => setShowDatePicker(true)}>
           <View pointerEvents="none">
             <TextInput
               label="Data*"
@@ -90,7 +87,6 @@ export const NewTransaction = ({
             display="default"
             minimumDate={new Date(1950, 0, 1)}
             onChange={(_: Event, selectedDate: Date | undefined) => {
-              console.log('a');
               setShowDatePicker(Platform.OS === 'ios');
               setDate(selectedDate || date);
             }}
@@ -105,13 +101,17 @@ export const NewTransaction = ({
             <TextInput label="Moeda*" value="BRL" setValue={() => {}} />
           </View>
           <Separator />
-          <TextInput
-            label="Valor*"
-            value={quoteValue}
-            setValue={setQuoteValue}
-            placeholder="0,00"
-            keyboardType="decimal-pad"
-          />
+          <View style={{ flexGrow: 1 }}>
+            <Label>Valor*</Label>
+            <CurrencyInput
+              value={quoteValue}
+              onChangeValue={(value) => setQuoteValue(value || 0)}
+              delimiter="."
+              separator=","
+              precision={2}
+              placeholder="0,00"
+            />
+          </View>
         </ValuesContainer>
       </InputGroup>
 
@@ -122,13 +122,17 @@ export const NewTransaction = ({
             <TextInput label="Moeda*" value="BRL" setValue={() => {}} />
           </View>
           <Separator />
-          <TextInput
-            label="Valor*"
-            value={transactionValue}
-            setValue={setTransactionValue}
-            placeholder="0,00"
-            keyboardType="decimal-pad"
-          />
+          <View style={{ flexGrow: 1 }}>
+            <Label>Valor*</Label>
+            <CurrencyInput
+              value={transactionValue}
+              onChangeValue={(value) => setTransactionValue(value || 0)}
+              delimiter="."
+              separator=","
+              precision={2}
+              placeholder="0,00"
+            />
+          </View>
         </ValuesContainer>
       </InputGroup>
 
